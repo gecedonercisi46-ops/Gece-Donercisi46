@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andırın Gece Dönercisi | Premium Menü</title>
+    <!-- Fontlar -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        :root {
+            --primary: #ff9f43;
+            --accent: #ee5253;
+            --gold: #f1c40f;
+            --dark: #0a0a0a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background: var(--dark); 
+            color: #fff; 
+            overflow-x: hidden;
+        }
+
+        /* ARKA PLAN KIVILCIM ANİMASYONU */
+        .bg-embers {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1a0f00 0%, #000 100%);
+        }
+
+        .ember {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: fly 6s infinite linear;
+            opacity: 0;
+        }
+
+        @keyframes fly {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
+        }
+
+        /* HEADER & LOGO */
+        header { 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(to bottom, transparent, var(--dark));
+        }
+
+        .logo-box {
+            position: relative;
+            padding: 20px;
+            border: 4px solid var(--gold);
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 10px var(--gold); }
+            50% { box-shadow: 0 0 30px var(--primary); }
+            100% { box-shadow: 0 0 10px var(--gold); }
+        }
+
+        .logo-text {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 70px;
+            letter-spacing: 5px;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            font-size: 12px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* MENÜ TASARIMI */
+        .container { max-width: 800px; margin: 0 auto; padding: 50px 20px; }
+
+        .section-header {
+            text-align: center;
+            margin: 80px 0 40px;
+            position: relative;
+        }
+
+        .section-header h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 40px;
+            color: var(--primary);
+            display: inline-block;
+            padding: 0 20px;
+            background: var(--dark);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header::after {
+            content: "";
+            position: absolute;
+            left: 0; top: 50%; width: 100%; height: 1px;
+            background: #333;
+        }
+
+        /* MENÜ KALEMLERİ */
+        .menu-item {
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #222;
+            transition: 0.4s;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        /* Kaydırınca Görünme Animasyonu Sınıfı */
+        .show-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 159, 67, 0.1);
+            border-color: var(--gold);
+            transform: scale(1.02);
+        }
+
+        .item-info h3 { font-size: 22px; color: #fff; margin-bottom: 5px; }
+        .item-info p { font-size: 14px; color: #888; }
+
+        .item-price {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 32px;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+        }
+
+        /* İÇECEK TABLOSU */
+        .drink-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .drink-box {
+            background: #111;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        /* SİPARİŞ BUTONU (HAREKETLİ) */
+        .order-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #25d366, #128c7e);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 1000;
+            transition: 0.3s;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(1); box-shadow: 0 0 0px rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 20px rgba(37, 211, 102, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0px rgba(37, 211, 102, 0); }
+        }
+
+        @media (max-width: 600px) {
+            .logo-text { font-size: 45px; }
+            .drink-grid { grid-template-columns: 1fr; }
+            .order-btn { width: 90%; left: 5%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-embers" id="embers"></div>
+
+    <header>
+        <div class="logo-box animate__animated animate__zoomIn">
+            <div class="logo-text">ANDIRIN GECE<br>DÖNERCİSİ</div>
+        </div>
+        <p class="tagline animate__animated animate__fadeInUp animate__delay-1s" style="margin-top: 20px; color: #888;">"Karanlığı Lezzetle Aydınlatıyoruz"</p>
+        <div class="scroll-hint">Aşağı Kaydır</div>
+    </header>
+
+    <div class="container">
+        
+        <!-- TAVUK GRUBU -->
+        <div class="section-header"><h2>🍗 Tavuk Döner Grubu</h2></div>
+        
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Tavuk Döner Dürüm</h3>
+                <p>Odun Ateşinde Pişmiş 80gr Tavuk</p>
+            </div>
+            <div class="item-price">110 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Pilav Üstü Tavuk</h3>
+                <p>Tereyağlı Köy Pilavı ile Sunum</p>
+            </div>
+            <div class="item-price">190 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Tavuk İskender</h3>
+                <p>Özel Sos ve Köy Yoğurdu</p>
+            </div>
+            <div class="item-price">220 TL</div>
+        </div>
+
+        <!-- ET GRUBU -->
+        <div class="section-header"><h2>🥩 Et Döner Grubu</h2></div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Et Döner Dürüm</h3>
+                <p>%100 Dana Eti - 80gr</p>
+            </div>
+            <div class="item-price">160 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Pilav Üstü Et Döner</h3>
+                <p>Geleneksel Köy Pilavı Üstünde</p>
+            </div>
+            <div class="item-price">260 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Et İskender</h3>
+                <p>Kızgın Tereyağı Eşliğinde</p>
+            </div>
+            <div class="item-price">280 TL</div>
+        </div>
+
+        <!-- ÖZELLER -->
+        <div class="section-header"><h2>✨ Gece Özel</h2></div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Çökertme Kebabı</h3>
+                <p>Kıtır Patatesli Meşhur Lezzet</p>
+            </div>
+            <div class="item-price">280 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>Günün Sıcak Çorbası</h3>
+                <p>Geceye Sıcak Bir Başlangıç</p>
+            </div>
+            <div class="item-price">80 TL</div>
+        </div>
+
+        <!-- İÇECEKLER -->
+        <div class="section-header"><h2>🥤 İçecekler</h2></div>
+        <div class="drink-grid">
+            <div class="drink-box"><h3>AYRAN</h3><p>20 TL</p></div>
+            <div class="drink-box"><h3>ŞALGAM</h3><p>20 TL</p></div>
+            <div class="drink-box"><h3>SODA</h3><p>15 TL</p></div>
+            <div class="drink-box"><h3>KOLA</h3><p>50 TL</p></div>
+        </div>
+
+    </div>
+
+    <a href="tel:05302855639" class="order-btn">📞 HEMEN ARA: 0530 285 56 39</a>
+
+    <!-- ANİMASYON SCRIPTLERİ -->
+    <script>
+        // Arka plan kıvılcımları oluşturma
+        const emberContainer = document.getElementById('embers');
+        for (let i = 0; i < 30; i++) {
+            const ember = document.createElement('div');
+            ember.className = 'ember';
+            ember.style.left = Math.random() * 100 + 'vw';
+            ember.style.animationDelay = Math.random() * 5 + 's';
+            ember.style.opacity = Math.random();
+            emberContainer.appendChild(ember);
+        }
+
+        // Kaydırınca öğelerin belirmesi (Scroll Reveal)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show-item');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.menu-item').forEach(item => observer.observe(item));
+    </script>
+</body>
+</html>
